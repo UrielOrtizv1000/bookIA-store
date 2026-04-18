@@ -15,7 +15,7 @@
         <div class="cart-item__info">
           <h2>{{ item.producto.nombre }}</h2>
           <p class="inline-meta">Categoria: {{ item.producto.categoria }}</p>
-          <p class="inline-meta">Marca: {{ item.producto.marca }}</p>
+          <p class="inline-meta">Autor: {{ item.producto.autor }}</p>
           <p class="inline-meta">Precio unitario: {{ item.producto.precio | currency:'USD':'symbol':'1.2-2' }}</p>
           <p class="inline-meta">Subtotal: {{ getSubtotal(item) | currency:'USD':'symbol':'1.2-2' }}</p>
         </div>
