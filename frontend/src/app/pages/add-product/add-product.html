@@ -44,9 +44,14 @@
 
         <label class="field field--full">
           <span>Imagen</span>
-          <input type="text" formControlName="imagen" />
+          <input
+            #imageInput
+            type="file"
+            accept="image/*"
+            (change)="onImageSelected($event)"
+          />
           <small *ngIf="isInvalid('imagen')" class="field-error">
-            Ingresa la URL o ruta de la imagen.
+            Selecciona una imagen.
           </small>
         </label>
 

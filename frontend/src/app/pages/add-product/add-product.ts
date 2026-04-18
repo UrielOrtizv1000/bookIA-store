@@ -1,9 +1,8 @@
 import { CommonModule } from '@angular/common';
 import { HttpErrorResponse } from '@angular/common/http';
-import { Component, DestroyRef, inject } from '@angular/core';
+import { Component, DestroyRef, ElementRef, ViewChild, inject } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Product } from '../../models/product.interface';
 import { ProductsService } from '../../services/products.service';
 
 // Vista base para el alta de libros.
@@ -14,6 +13,8 @@ import { ProductsService } from '../../services/products.service';
   styleUrl: './add-product.css',
 })
 export class AddProductPageComponent {
+  @ViewChild('imageInput') private imageInput?: ElementRef<HTMLInputElement>;
+
   // Formulario reactivo y estado de guardado.
   private readonly destroyRef = inject(DestroyRef);
   private readonly formBuilder = inject(FormBuilder);
@@ -23,6 +24,7 @@ export class AddProductPageComponent {
   protected isSubmitted = false;
   protected successMessage = '';
   protected errorMessage = '';
+  private selectedImageFile: File | null = null;
 
   protected readonly productForm = this.formBuilder.nonNullable.group({
     nombre: ['', [Validators.required]],
@@ -54,6 +56,16 @@ export class AddProductPageComponent {
     return control.invalid && (control.touched || this.isSubmitted);
   }
 
+  protected onImageSelected(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    const file = input.files?.[0] ?? null;
+
+    this.selectedImageFile = file;
+    this.productForm.controls.imagen.setValue(file?.name ?? '');
+    this.productForm.controls.imagen.markAsTouched();
+    this.productForm.controls.imagen.updateValueAndValidity();
+  }
+
   protected submitForm(): void {
     this.isSubmitted = true;
     this.successMessage = '';
@@ -66,16 +78,17 @@ export class AddProductPageComponent {
 
     const rawValue = this.productForm.getRawValue();
     const disponible = Number(rawValue.stock) > 0;
-    const payload: Omit<Product, 'id'> = {
-      nombre: rawValue.nombre.trim(),
-      categoria: rawValue.categoria.trim(),
-      autor: rawValue.autor.trim(),
-      precio: Number(rawValue.precio),
-      stock: Number(rawValue.stock),
-      imagen: rawValue.imagen.trim(),
-      descripcion: rawValue.descripcion.trim(),
-      disponible,
-    };
+    const payload = new FormData();
+    payload.append('title', rawValue.nombre.trim());
+    payload.append('genre', rawValue.categoria.trim());
+    payload.append('author', rawValue.autor.trim());
+    payload.append('price', String(Number(rawValue.precio)));
+    payload.append('stock', String(Number(rawValue.stock)));
+    payload.append('description', rawValue.descripcion.trim());
+
+    if (this.selectedImageFile) {
+      payload.append('cover', this.selectedImageFile);
+    }
 
     this.isSubmitting = true;
 
@@ -94,6 +107,10 @@ export class AddProductPageComponent {
           descripcion: '',
           disponible: false,
         });
+        this.selectedImageFile = null;
+        if (this.imageInput) {
+          this.imageInput.nativeElement.value = '';
+        }
       },
       error: (error: HttpErrorResponse) => {
         this.errorMessage =

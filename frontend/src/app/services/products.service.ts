@@ -36,6 +36,7 @@ export class ProductsService {
   // Conexion centralizada con la API de productos.
   private readonly http = inject(HttpClient);
   private readonly apiUrl = 'http://localhost:3000/api/books';
+  private readonly uploadsUrl = 'http://localhost:3000/uploads';
 
   getProducts(): Observable<Product[]> {
     return this.http.get<ApiResponse<ApiProduct[]> | ApiProduct[]>(this.apiUrl).pipe(
@@ -53,12 +54,9 @@ export class ProductsService {
       );
   }
 
-  createProduct(product: Omit<Product, 'id'>): Observable<Product> {
+  createProduct(product: FormData): Observable<Product> {
     return this.http
-      .post<ApiResponse<ApiProduct> | ApiProduct>(
-        this.apiUrl,
-        this.createProductPayload(product),
-      )
+      .post<ApiResponse<ApiProduct> | ApiProduct>(this.apiUrl, product)
       .pipe(
         map((response) => this.readData(response)),
         map((createdProduct) => this.normalizeProduct(createdProduct)),
@@ -87,21 +85,31 @@ export class ProductsService {
       autor: String(product.autor ?? product.author ?? ''),
       precio: Number(product.precio ?? product.price ?? 0),
       stock,
-      imagen: String(product.imagen ?? product.cover ?? ''),
+      imagen: this.buildImageUrl(String(product.imagen ?? product.cover ?? '')),
       descripcion: String(product.descripcion ?? product.description ?? ''),
       disponible: Boolean(product.disponible ?? product.available ?? stock > 0),
     };
   }
 
-  private createProductPayload(product: Omit<Product, 'id'>): Record<string, unknown> {
-    return {
-      stock: product.stock,
-      title: product.nombre,
-      genre: product.categoria,
-      author: product.autor,
-      price: product.precio,
-      cover: product.imagen,
-      description: product.descripcion,
-    };
+  private buildImageUrl(imageName: string): string {
+    const normalizedImageName = imageName.trim();
+
+    if (!normalizedImageName) {
+      return '';
+    }
+
+    if (/^https?:\/\//i.test(normalizedImageName)) {
+      return normalizedImageName;
+    }
+
+    if (normalizedImageName.startsWith('/uploads/')) {
+      return `http://localhost:3000${normalizedImageName}`;
+    }
+
+    if (normalizedImageName.startsWith('uploads/')) {
+      return `http://localhost:3000/${normalizedImageName}`;
+    }
+
+    return `${this.uploadsUrl}/${normalizedImageName}`;
   }
 }

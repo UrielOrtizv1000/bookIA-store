@@ -5,10 +5,11 @@ const {
   getBookById,
   createBook,
 } = require('../controllers/books.controller');
+const uploadBookCover = require('../middlewares/upload');
 const { validateBookPayload } = require('../middlewares/validation');
 
 router.get('/', getAllBooks);
 router.get('/:id', getBookById);
-router.post('/', validateBookPayload, createBook);
+router.post('/', uploadBookCover.single('cover'), validateBookPayload, createBook);
 
 module.exports = router;
