@@ -1,1 +1,3 @@
-/* Base visual de la pagina de catalogo. */
+.page {
+  align-content: start;
+}

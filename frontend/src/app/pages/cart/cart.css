@@ -1,1 +1,64 @@
-/* Base visual de la pagina del carrito. */
+.cart-layout {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 1rem;
+  align-items: start;
+}
+
+.cart-list {
+  display: grid;
+  gap: 1rem;
+}
+
+.cart-item {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.cart-item__info {
+  display: grid;
+  gap: 0.35rem;
+}
+
+.cart-item__info h2 {
+  margin: 0;
+}
+
+.cart-item__controls {
+  display: grid;
+  gap: 0.75rem;
+  justify-items: end;
+}
+
+.quantity-controls {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.quantity-controls span {
+  min-width: 2rem;
+  text-align: center;
+  font-weight: 700;
+}
+
+.summary-box {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.summary-box h2 {
+  margin: 0;
+}
+
+@media (max-width: 860px) {
+  .cart-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .cart-item__controls {
+    justify-items: start;
+  }
+}

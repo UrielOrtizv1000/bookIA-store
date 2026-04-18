@@ -1,4 +1,42 @@
 <!-- Estructura base de la tarjeta compartida. -->
-<article>
-  <!-- Area reservada para contenido visual, estados dinamicos y futuras pipes. -->
+<article class="product-card" *ngIf="product as currentProduct">
+  <div class="product-card__cover">
+    <img
+      *ngIf="hasCover; else cardFallback"
+      [src]="currentProduct.imagen"
+      [alt]="currentProduct.nombre"
+      (error)="onImageError()"
+    />
+
+    <ng-template #cardFallback>
+      <div class="cover-placeholder">Portada no disponible</div>
+    </ng-template>
+  </div>
+
+  <div class="product-card__body">
+    <p class="product-card__genre">{{ currentProduct.categoria | titlecase }}</p>
+    <h3 class="product-card__title">{{ currentProduct.nombre }}</h3>
+    <p class="product-card__meta">Marca: {{ currentProduct.marca }}</p>
+    <p class="product-card__price">{{ currentProduct.precio | currency:'USD':'symbol':'1.2-2' }}</p>
+    <p class="product-card__stock">Stock: {{ currentProduct.stock }}</p>
+    <p class="product-card__description">
+      {{ currentProduct.descripcion | slice:0:120 }}{{ currentProduct.descripcion.length > 120 ? '...' : '' }}
+    </p>
+    <span
+      class="status-chip"
+      [ngClass]="{
+        'status-chip--available': canAddToCart,
+        'status-chip--unavailable': !canAddToCart
+      }"
+    >
+      {{ canAddToCart ? 'Disponible' : 'Sin stock' }}
+    </span>
+  </div>
+
+  <div class="product-card__actions">
+    <a class="text-link" [routerLink]="['/productos', currentProduct.id]">Ver detalle</a>
+    <button class="btn" type="button" [disabled]="!canAddToCart" (click)="emitAddToCart()">
+      Agregar al carrito
+    </button>
+  </div>
 </article>

@@ -1,4 +1,52 @@
 <!-- Contenedor principal del detalle de producto. -->
-<section>
-  <!-- Area reservada para la informacion dinamica y futuras pipes. -->
+<section class="page">
+  <div class="page-header">
+    <a class="text-link" routerLink="/productos">Volver al catalogo</a>
+    <h1>Detalle de producto</h1>
+  </div>
+
+  <p *ngIf="isLoading" class="state-box">Cargando producto...</p>
+  <p *ngIf="!isLoading && errorMessage" class="feedback feedback--error">{{ errorMessage }}</p>
+  <p *ngIf="!isLoading && notFound" class="state-box">
+    No se encontro el producto solicitado.
+  </p>
+
+  <article *ngIf="!isLoading && product as currentProduct" class="detail-box detail-layout">
+    <div class="detail-cover">
+      <img
+        *ngIf="hasCover; else detailFallback"
+        [src]="currentProduct.imagen"
+        [alt]="currentProduct.nombre"
+        (error)="onImageError()"
+      />
+
+      <ng-template #detailFallback>
+        <div class="cover-placeholder">Portada no disponible</div>
+      </ng-template>
+    </div>
+
+    <div class="detail-content">
+      <p class="muted-text">{{ currentProduct.categoria | titlecase }}</p>
+      <h2>{{ currentProduct.nombre }}</h2>
+      <p class="inline-meta">Marca: {{ currentProduct.marca }}</p>
+      <p class="inline-meta">Precio: {{ currentProduct.precio | currency:'USD':'symbol':'1.2-2' }}</p>
+      <p class="inline-meta">Stock: {{ currentProduct.stock }}</p>
+      <span
+        class="status-chip"
+        [ngClass]="{
+          'status-chip--available': canAddToCart,
+          'status-chip--unavailable': !canAddToCart
+        }"
+      >
+        {{ canAddToCart ? 'Disponible' : 'Sin stock' }}
+      </span>
+      <p class="detail-description">{{ currentProduct.descripcion }}</p>
+
+      <div class="detail-actions">
+        <button class="btn" type="button" [disabled]="!canAddToCart" (click)="addToCart()">
+          Agregar al carrito
+        </button>
+      </div>
+    </div>
+  </article>
 </section>

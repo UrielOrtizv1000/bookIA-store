@@ -1,1 +1,24 @@
-/* Base visual de la pagina de alta de productos. */
+.form-box form {
+  display: grid;
+  gap: 1rem;
+}
+
+.form-actions {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.field-checkbox {
+  grid-template-columns: auto 1fr;
+  align-items: center;
+}
+
+.field-checkbox span {
+  font-weight: 600;
+}
+
+.field-checkbox input {
+  width: 1rem;
+  height: 1rem;
+}

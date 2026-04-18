@@ -13,23 +13,23 @@ export const routes: Routes = [
     component: HomePageComponent,
   },
   {
-    path: 'products',
+    path: 'productos',
     component: ProductsPageComponent,
   },
   {
-    path: 'products/new',
+    path: 'agregar-producto',
     component: AddProductPageComponent,
   },
   {
-    path: 'products/:id',
+    path: 'productos/:id',
     component: ProductDetailPageComponent,
   },
   {
-    path: 'cart',
+    path: 'carrito',
     component: CartPageComponent,
   },
   {
-    path: 'contact',
+    path: 'contacto',
     component: ContactPageComponent,
   },
 ];
