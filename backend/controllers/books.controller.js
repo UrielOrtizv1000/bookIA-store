@@ -1,4 +1,11 @@
 const db = require('../config/db');
+const fs = require('fs');
+
+function removeUploadedFile(file) {
+  if (file?.path) {
+    fs.unlink(file.path, () => undefined);
+  }
+}
 
 function mapBook(book) {
   return {
@@ -73,9 +80,9 @@ async function createBook(req, res, next) {
     genre,
     price,
     stock,
-    cover,
     description,
   } = req.body;
+  const cover = req.file.filename;
 
   try {
     const [existingBooks] = await db.query(
@@ -87,6 +94,7 @@ async function createBook(req, res, next) {
     );
 
     if (existingBooks.length > 0) {
+      removeUploadedFile(req.file);
       return res.status(409).json({
         success: false,
         message: 'Ya existe un libro registrado con el mismo titulo.',

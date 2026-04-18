@@ -1,3 +1,4 @@
+const fs = require('fs');
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 function isNonEmptyString(value) {
@@ -11,6 +12,12 @@ function buildValidationError(errors) {
   return error;
 }
 
+function removeUploadedFile(file) {
+  if (file?.path) {
+    fs.unlink(file.path, () => undefined);
+  }
+}
+
 function validateBookPayload(req, res, next) {
   const {
     title,
@@ -18,7 +25,6 @@ function validateBookPayload(req, res, next) {
     genre,
     price,
     stock,
-    cover,
     description,
   } = req.body;
 
@@ -42,10 +48,8 @@ function validateBookPayload(req, res, next) {
     req.body.genre = genre.trim();
   }
 
-  if (!isNonEmptyString(cover)) {
+  if (!req.file) {
     errors.push({ field: 'cover', message: 'La portada es obligatoria.' });
-  } else {
-    req.body.cover = cover.trim();
   }
 
   if (!isNonEmptyString(description)) {
@@ -69,6 +73,7 @@ function validateBookPayload(req, res, next) {
   }
 
   if (errors.length > 0) {
+    removeUploadedFile(req.file);
     return next(buildValidationError(errors));
   }
 
