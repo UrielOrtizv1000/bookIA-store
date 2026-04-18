@@ -12,11 +12,4 @@ const pool = mysql.createPool({
   decimalNumbers: true,
 });
 
-pool.getConnection().then(connection => {
-  console.log('Database connected via pool.');
-  connection.release();
-}).catch(err => {
-  console.error('Error connecting to the database pool: ', err);
-});
-
 module.exports = pool;
