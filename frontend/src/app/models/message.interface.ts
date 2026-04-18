@@ -1,8 +1,8 @@
 // Estructura base de un mensaje de contacto.
 export interface Message {
   id?: number;
-  name: string;
-  email: string;
-  subject: string;
-  message: string;
+  nombre: string;
+  correo: string;
+  asunto: string;
+  mensaje: string;
 }
