@@ -1,1 +1,25 @@
-/* Base visual del pie de pagina. */
+.site-footer {
+  background: linear-gradient(180deg, var(--color-primary) 0%, #5a654f 100%);
+  color: var(--color-base);
+  box-shadow: 0 -1px 3px rgba(80, 75, 58, 0.1);
+}
+
+.footer-inner {
+  width: min(1100px, calc(100% - 2rem));
+  margin: 0 auto;
+  padding: 1rem 0 1.4rem;
+  text-align: center;
+  display: grid;
+  gap: 0.2rem;
+}
+
+.footer-inner p,
+.footer-inner small {
+  margin: 0;
+}
+
+@media (max-width: 720px) {
+  .footer-inner {
+    width: min(100% - 1rem, 1100px);
+  }
+}
