@@ -1,0 +1,22 @@
+.hero {
+  display: grid;
+  gap: 0.9rem;
+}
+
+.hero h1,
+.hero__eyebrow {
+  margin: 0;
+}
+
+.hero__eyebrow {
+  color: var(--color-detail);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-size: 0.85rem;
+}
+
+.hero__actions {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}

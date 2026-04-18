@@ -1,0 +1,24 @@
+<!-- Contenedor principal del catalogo de libros. -->
+<section class="page">
+  <div class="page-header">
+    <h1>Catalogo de productos</h1>
+    <p class="page-intro">
+      Revisa nombre, categoria, marca, precio, stock, descripcion corta y disponibilidad.
+    </p>
+  </div>
+
+  <p *ngIf="isLoading" class="state-box">Cargando catalogo...</p>
+  <p *ngIf="!isLoading && errorMessage" class="feedback feedback--error">{{ errorMessage }}</p>
+
+  <div *ngIf="!isLoading && !errorMessage && products.length" class="product-grid">
+    <app-product-card
+      *ngFor="let product of products"
+      [product]="product"
+      (addToCart)="addToCart($event)"
+    ></app-product-card>
+  </div>
+
+  <p *ngIf="!isLoading && !errorMessage && !products.length" class="state-box">
+    No hay libros para mostrar en este momento.
+  </p>
+</section>

@@ -1,0 +1,41 @@
+.detail-layout {
+  display: grid;
+  grid-template-columns: minmax(220px, 280px) 1fr;
+  gap: 1.25rem;
+  align-items: start;
+}
+
+.detail-cover img {
+  width: 100%;
+  aspect-ratio: 3 / 4;
+  object-fit: cover;
+  border: 1px solid var(--color-detail);
+  border-radius: 6px;
+  background: var(--color-base);
+}
+
+.detail-content {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.detail-content h2,
+.detail-description {
+  margin: 0;
+}
+
+.detail-actions {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+@media (max-width: 780px) {
+  .detail-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .detail-cover {
+    max-width: 320px;
+  }
+}

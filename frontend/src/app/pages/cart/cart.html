@@ -1,0 +1,51 @@
+<!-- Contenedor principal del carrito de compras. -->
+<section class="page">
+  <div class="page-header">
+    <h1>Carrito</h1>
+    <p class="page-intro">Revisa los productos seleccionados antes de continuar.</p>
+  </div>
+
+  <p *ngIf="!items().length" class="state-box">
+    Tu carrito esta vacio. Puedes volver al catalogo para agregar productos.
+  </p>
+
+  <section *ngIf="items().length" class="cart-layout">
+    <div class="cart-list">
+      <article *ngFor="let item of items(); trackBy: trackByProductId" class="cart-item">
+        <div class="cart-item__info">
+          <h2>{{ item.producto.nombre }}</h2>
+          <p class="inline-meta">Categoria: {{ item.producto.categoria }}</p>
+          <p class="inline-meta">Marca: {{ item.producto.marca }}</p>
+          <p class="inline-meta">Precio unitario: {{ item.producto.precio | currency:'USD':'symbol':'1.2-2' }}</p>
+          <p class="inline-meta">Subtotal: {{ getSubtotal(item) | currency:'USD':'symbol':'1.2-2' }}</p>
+        </div>
+
+        <div class="cart-item__controls">
+          <div class="quantity-controls">
+            <button class="btn btn--secondary" type="button" (click)="decreaseQuantity(item)">
+              -
+            </button>
+            <span>{{ item.cantidad }}</span>
+            <button
+              class="btn btn--secondary"
+              type="button"
+              (click)="increaseQuantity(item)"
+              [disabled]="item.cantidad >= item.producto.stock || !item.producto.disponible"
+            >
+              +
+            </button>
+          </div>
+
+          <button class="text-link" type="button" (click)="removeItem(item)">Quitar</button>
+        </div>
+      </article>
+    </div>
+
+    <aside class="summary-box">
+      <h2>Resumen</h2>
+      <p class="inline-meta">Cantidad total: {{ totalItems() }}</p>
+      <p class="inline-meta">Total general: {{ totalAmount() | currency:'USD':'symbol':'1.2-2' }}</p>
+      <a class="btn" routerLink="/productos">Seguir explorando</a>
+    </aside>
+  </section>
+</section>

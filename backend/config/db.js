@@ -8,14 +8,8 @@ const pool = mysql.createPool({
   port: process.env.DB_PORT,
   waitForConnections: true,
   connectionLimit: 10,
-  queueLimit: 0
-});
-
-pool.getConnection().then(connection => {
-  console.log('Database connected via pool.');
-  connection.release();
-}).catch(err => {
-  console.error('Error connecting to the database pool: ', err);
+  queueLimit: 0,
+  decimalNumbers: true,
 });
 
 module.exports = pool;
