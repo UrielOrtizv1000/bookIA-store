@@ -27,12 +27,12 @@ export class AddProductPageComponent {
   protected readonly productForm = this.formBuilder.nonNullable.group({
     nombre: ['', [Validators.required]],
     categoria: ['', [Validators.required]],
-    marca: ['', [Validators.required]],
+    autor: ['', [Validators.required]],
     precio: [0, [Validators.required, Validators.min(0.01)]],
     stock: [0, [Validators.required, Validators.min(0)]],
     imagen: ['', [Validators.required]],
     descripcion: ['', [Validators.required, Validators.minLength(10)]],
-    disponible: [false],
+    disponible: [{ value: false, disabled: true }],
   });
 
   constructor() {
@@ -69,7 +69,7 @@ export class AddProductPageComponent {
     const payload: Omit<Product, 'id'> = {
       nombre: rawValue.nombre.trim(),
       categoria: rawValue.categoria.trim(),
-      marca: rawValue.marca.trim(),
+      autor: rawValue.autor.trim(),
       precio: Number(rawValue.precio),
       stock: Number(rawValue.stock),
       imagen: rawValue.imagen.trim(),
@@ -87,7 +87,7 @@ export class AddProductPageComponent {
         this.productForm.reset({
           nombre: '',
           categoria: '',
-          marca: '',
+          autor: '',
           precio: 0,
           stock: 0,
           imagen: '',

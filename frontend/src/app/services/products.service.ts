@@ -13,7 +13,7 @@ interface ApiProduct {
   id?: number;
   nombre?: string;
   categoria?: string;
-  marca?: string;
+  autor?: string;
   precio?: number;
   stock?: number;
   imagen?: string;
@@ -84,7 +84,7 @@ export class ProductsService {
       id: Number(product.id ?? 0),
       nombre: String(product.nombre ?? product.title ?? ''),
       categoria: String(product.categoria ?? product.genre ?? ''),
-      marca: String(product.marca ?? product.author ?? ''),
+      autor: String(product.autor ?? product.author ?? ''),
       precio: Number(product.precio ?? product.price ?? 0),
       stock,
       imagen: String(product.imagen ?? product.cover ?? ''),
@@ -98,7 +98,7 @@ export class ProductsService {
       stock: product.stock,
       title: product.nombre,
       genre: product.categoria,
-      author: product.marca,
+      author: product.autor,
       price: product.precio,
       cover: product.imagen,
       description: product.descripcion,

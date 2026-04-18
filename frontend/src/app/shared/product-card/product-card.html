@@ -16,7 +16,7 @@
   <div class="product-card__body">
     <p class="product-card__genre">{{ currentProduct.categoria | titlecase }}</p>
     <h3 class="product-card__title">{{ currentProduct.nombre }}</h3>
-    <p class="product-card__meta">Marca: {{ currentProduct.marca }}</p>
+    <p class="product-card__meta">Autor: {{ currentProduct.autor }}</p>
     <p class="product-card__price">{{ currentProduct.precio | currency:'USD':'symbol':'1.2-2' }}</p>
     <p class="product-card__stock">Stock: {{ currentProduct.stock }}</p>
     <p class="product-card__description">
