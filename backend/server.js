@@ -1,34 +1,34 @@
 require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
-const pool = require('./config/db');
-const healthRoutes = require('./routes/health.routes');
-const booksRoutes = require('./routes/books.routes');
-const messagesRoutes = require('./routes/messages.routes');
-const notFound = require('./middlewares/notFound');
+const db = require('./config/db');
+const apiRoutes = require('./routes');
 const errorHandler = require('./middlewares/errorHandler');
+const notFound = require('./middlewares/notFound');
 
 const app = express();
-const PORT = process.env.PORT || 3000;
+const PORT = Number(process.env.PORT) || 3000;
 
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// ROUTES
-app.use('/api', healthRoutes);
-app.use('/api/books', booksRoutes);
-app.use('/api/messages', messagesRoutes);
+app.get('/', (req, res) => {
+  res.status(200).json({
+    success: true,
+    message: 'API de tienda de libros operativa.',
+  });
+});
 
-// Not Found pages middleware
+app.use('/api', apiRoutes);
+
 app.use(notFound);
 
-// Error handler middleware
 app.use(errorHandler);
 
 async function startServer() {
   try {
-    const connection = await pool.getConnection();
+    const connection = await db.getConnection();
     connection.release();
 
     app.listen(PORT, () => {
@@ -41,3 +41,5 @@ async function startServer() {
 }
 
 startServer();
+
+module.exports = app;
