@@ -1,4 +1,77 @@
 <!-- Contenedor principal de la pagina de contacto. -->
-<section>
-  <!-- Espacio reservado para el formulario basado en plantilla. -->
+<section class="page">
+  <div class="page-header">
+    <h1>Contacto</h1>
+    <p class="page-intro">Envia un mensaje simple a traves del backend ya disponible.</p>
+  </div>
+
+  <section class="form-box">
+    <form #contactForm="ngForm" (ngSubmit)="submitForm(contactForm)" novalidate>
+      <div class="form-grid">
+        <label class="field">
+          <span>Nombre</span>
+          <input
+            type="text"
+            name="nombre"
+            [(ngModel)]="formModel.nombre"
+            #nameField="ngModel"
+            required
+          />
+          <small *ngIf="showFieldError(nameField)" class="field-error">Ingresa tu nombre.</small>
+        </label>
+
+        <label class="field">
+          <span>Correo</span>
+          <input
+            type="email"
+            name="correo"
+            [(ngModel)]="formModel.correo"
+            #emailField="ngModel"
+            required
+            email
+          />
+          <small *ngIf="showFieldError(emailField)" class="field-error">
+            Ingresa un email valido.
+          </small>
+        </label>
+
+        <label class="field field--full">
+          <span>Asunto</span>
+          <input
+            type="text"
+            name="asunto"
+            [(ngModel)]="formModel.asunto"
+            #subjectField="ngModel"
+            required
+          />
+          <small *ngIf="showFieldError(subjectField)" class="field-error">
+            Ingresa el asunto.
+          </small>
+        </label>
+
+        <label class="field field--full">
+          <span>Mensaje</span>
+          <textarea
+            name="mensaje"
+            [(ngModel)]="formModel.mensaje"
+            #messageField="ngModel"
+            required
+            minlength="10"
+          ></textarea>
+          <small *ngIf="showFieldError(messageField)" class="field-error">
+            Ingresa un mensaje de al menos 10 caracteres.
+          </small>
+        </label>
+      </div>
+
+      <div class="form-actions">
+        <button class="btn" type="submit" [disabled]="isSubmitting">
+          {{ isSubmitting ? 'Enviando...' : 'Enviar mensaje' }}
+        </button>
+      </div>
+    </form>
+  </section>
+
+  <p *ngIf="successMessage" class="feedback feedback--success">{{ successMessage }}</p>
+  <p *ngIf="errorMessage" class="feedback feedback--error">{{ errorMessage }}</p>
 </section>

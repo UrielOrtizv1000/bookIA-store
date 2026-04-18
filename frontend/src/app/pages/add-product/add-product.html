@@ -1,4 +1,81 @@
 <!-- Contenedor principal del alta de productos. -->
-<section>
-  <!-- Espacio reservado para el formulario reactivo. -->
+<section class="page">
+  <div class="page-header">
+    <h1>Agregar producto</h1>
+    <p class="page-intro">Registra un nuevo producto para que aparezca en el catalogo.</p>
+  </div>
+
+  <section class="form-box">
+    <form [formGroup]="productForm" (ngSubmit)="submitForm()" novalidate>
+      <div class="form-grid">
+        <label class="field">
+          <span>Nombre</span>
+          <input type="text" formControlName="nombre" />
+          <small *ngIf="isInvalid('nombre')" class="field-error">Ingresa el nombre.</small>
+        </label>
+
+        <label class="field">
+          <span>Categoria</span>
+          <input type="text" formControlName="categoria" />
+          <small *ngIf="isInvalid('categoria')" class="field-error">Ingresa la categoria.</small>
+        </label>
+
+        <label class="field">
+          <span>Marca</span>
+          <input type="text" formControlName="marca" />
+          <small *ngIf="isInvalid('marca')" class="field-error">Ingresa la marca.</small>
+        </label>
+
+        <label class="field">
+          <span>Precio</span>
+          <input type="number" formControlName="precio" min="0.01" step="0.01" />
+          <small *ngIf="isInvalid('precio')" class="field-error">
+            El precio debe ser mayor que 0.
+          </small>
+        </label>
+
+        <label class="field">
+          <span>Stock</span>
+          <input type="number" formControlName="stock" min="0" step="1" />
+          <small *ngIf="isInvalid('stock')" class="field-error">
+            El stock debe ser 0 o mayor.
+          </small>
+        </label>
+
+        <label class="field field--full">
+          <span>Imagen</span>
+          <input type="text" formControlName="imagen" />
+          <small *ngIf="isInvalid('imagen')" class="field-error">
+            Ingresa la URL o ruta de la imagen.
+          </small>
+        </label>
+
+        <label class="field field--full">
+          <span>Descripcion</span>
+          <textarea formControlName="descripcion"></textarea>
+          <small *ngIf="isInvalid('descripcion')" class="field-error">
+            La descripcion debe tener al menos 10 caracteres.
+          </small>
+        </label>
+
+        <label class="field field--full field-checkbox">
+          <span>Disponible</span>
+          <input type="checkbox" formControlName="disponible" />
+        </label>
+      </div>
+
+      <p class="muted-text">
+        Disponibilidad calculada: <strong>{{ availablePreview ? 'Disponible' : 'Sin stock' }}</strong>
+      </p>
+
+      <div class="form-actions">
+        <button class="btn" type="submit" [disabled]="isSubmitting">
+          {{ isSubmitting ? 'Guardando...' : 'Guardar producto' }}
+        </button>
+      </div>
+    </form>
+  </section>
+
+  <p *ngIf="successMessage" class="feedback feedback--success">{{ successMessage }}</p>
+  <p *ngIf="errorMessage" class="feedback feedback--error">{{ errorMessage }}</p>
 </section>
