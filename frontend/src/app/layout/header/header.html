@@ -1,0 +1,23 @@
+<!-- Bloque principal de navegacion del sitio. -->
+<header class="site-header">
+  <div class="header-inner">
+    <a class="brand" routerLink="/">BookIA</a>
+
+    <nav class="site-nav">
+      <a
+        routerLink="/"
+        routerLinkActive="is-active"
+        [routerLinkActiveOptions]="exactLinkOptions"
+      >
+        Inicio
+      </a>
+      <a routerLink="/productos" routerLinkActive="is-active">Catalogo</a>
+      <a routerLink="/agregar-producto" routerLinkActive="is-active">Agregar producto</a>
+      <a routerLink="/contacto" routerLinkActive="is-active">Contacto</a>
+      <a routerLink="/carrito" routerLinkActive="is-active">
+        Carrito
+        <span class="cart-count">{{ cartCount() }}</span>
+      </a>
+    </nav>
+  </div>
+</header>
