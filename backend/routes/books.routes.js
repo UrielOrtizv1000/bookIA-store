@@ -1,14 +1,14 @@
 const express = require('express');
 const router = express.Router();
-const db = require('../config/db')
+const {
+  getAllBooks,
+  getBookById,
+  createBook,
+} = require('../controllers/books.controller');
+const { validateBookPayload } = require('../middlewares/validation');
 
-router.get('/', async (req, res, next) => {
-  try {
-    const [rows] = await db.query('SELECT * FROM books');
-    res.json(rows);
-  } catch (err) {
-    next(err);
-  }
-});
+router.get('/', getAllBooks);
+router.get('/:id', getBookById);
+router.post('/', validateBookPayload, createBook);
 
 module.exports = router;
