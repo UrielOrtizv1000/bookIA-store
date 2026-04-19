@@ -1,0 +1,69 @@
+name: Deploy Angular frontend to GitHub Pages
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+
+    defaults:
+      run:
+        working-directory: frontend
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build Angular app for GitHub Pages
+        run: npx ng build --configuration production --output-mode static --base-href "/bookIA-store/"
+
+      - name: Prepare Pages artifact
+        run: |
+          mkdir -p ../pages-artifact
+          INDEX_DIR=$(find dist -type f -name index.html | head -n 1 | xargs dirname)
+
+          if [ -z "$INDEX_DIR" ]; then
+            echo "No se encontró index.html dentro de dist"
+            exit 1
+          fi
+
+          cp -r "$INDEX_DIR"/. ../pages-artifact/
+          cp ../pages-artifact/index.html ../pages-artifact/404.html
+
+      - name: Configure GitHub Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v4
+        with:
+          path: ./pages-artifact
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: build
+    permissions:
+      pages: write
+      id-token: write
+
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
