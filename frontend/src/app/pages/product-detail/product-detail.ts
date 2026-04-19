@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { HttpErrorResponse } from '@angular/common/http';
-import { Component, DestroyRef, OnInit, inject } from '@angular/core';
+import { ChangeDetectorRef, Component, DestroyRef, OnInit, inject } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { Product } from '../../models/product.interface';
@@ -20,6 +20,7 @@ export class ProductDetailPageComponent implements OnInit {
   private readonly destroyRef = inject(DestroyRef);
   private readonly productsService = inject(ProductsService);
   private readonly route = inject(ActivatedRoute);
+  private readonly cdr = inject(ChangeDetectorRef);
 
   protected product: Product | null = null;
   protected isLoading = true;
@@ -72,6 +73,7 @@ export class ProductDetailPageComponent implements OnInit {
       next: (product) => {
         this.product = product;
         this.isLoading = false;
+        this.cdr.detectChanges();
       },
       error: (error: HttpErrorResponse) => {
         this.product = null;
@@ -80,6 +82,7 @@ export class ProductDetailPageComponent implements OnInit {
         this.errorMessage = this.notFound
           ? ''
           : error.error?.message ?? 'No fue posible cargar el detalle del producto.';
+        this.cdr.detectChanges();
       },
     });
   }

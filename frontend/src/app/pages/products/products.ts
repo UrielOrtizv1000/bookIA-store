@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { HttpErrorResponse } from '@angular/common/http';
-import { Component, OnInit, inject } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, inject } from '@angular/core';
 import { ProductCardComponent } from '../../shared/product-card/product-card';
 import { Product } from '../../models/product.interface';
 import { CartService } from '../../services/cart.service';
@@ -17,6 +17,7 @@ export class ProductsPageComponent implements OnInit {
   // Estado del catalogo y acciones locales.
   private readonly cartService = inject(CartService);
   private readonly productsService = inject(ProductsService);
+  private readonly cdr = inject(ChangeDetectorRef);
 
   protected products: Product[] = [];
   protected isLoading = true;
@@ -38,11 +39,13 @@ export class ProductsPageComponent implements OnInit {
       next: (products) => {
         this.products = products;
         this.isLoading = false;
+        this.cdr.detectChanges();
       },
       error: (error: HttpErrorResponse) => {
         this.errorMessage =
           error.error?.message ?? 'No fue posible cargar el catalogo de productos.';
         this.isLoading = false;
+        this.cdr.detectChanges();
       },
     });
   }
