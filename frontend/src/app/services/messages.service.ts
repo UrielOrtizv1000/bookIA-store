@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { map, Observable } from 'rxjs';
 import { Message } from '../models/message.interface';
+import { environment } from '../../environments/environment';
 
 interface ApiResponse<T> {
   data: T;
@@ -28,7 +29,7 @@ interface ApiMessage {
 export class MessagesService {
   // Conexion centralizada con la API de mensajes.
   private readonly http = inject(HttpClient);
-  private readonly apiUrl = 'http://localhost:3000/api/messages';
+  private readonly apiUrl = `${environment.apiUrl}/api/messages`;
 
   sendMessage(message: Message): Observable<Message> {
     return this.http

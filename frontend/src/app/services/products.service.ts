@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { map, Observable } from 'rxjs';
 import { Product } from '../models/product.interface';
+import { environment } from '../../environments/environment';
 
 interface ApiResponse<T> {
   data: T;
@@ -35,8 +36,8 @@ interface ApiProduct {
 export class ProductsService {
   // Conexion centralizada con la API de productos.
   private readonly http = inject(HttpClient);
-  private readonly apiUrl = 'http://localhost:3000/api/books';
-  private readonly uploadsUrl = 'http://localhost:3000/uploads';
+  private readonly apiUrl = `${environment.apiUrl}/api/books`;
+  private readonly uploadsUrl = `${environment.apiUrl}/uploads`;
 
   getProducts(): Observable<Product[]> {
     return this.http.get<ApiResponse<ApiProduct[]> | ApiProduct[]>(this.apiUrl).pipe(
@@ -103,11 +104,11 @@ export class ProductsService {
     }
 
     if (normalizedImageName.startsWith('/uploads/')) {
-      return `http://localhost:3000${normalizedImageName}`;
+      return `${environment.apiUrl}${normalizedImageName}`;
     }
 
     if (normalizedImageName.startsWith('uploads/')) {
-      return `http://localhost:3000/${normalizedImageName}`;
+      return `${environment.apiUrl}/${normalizedImageName}`;
     }
 
     return `${this.uploadsUrl}/${normalizedImageName}`;
